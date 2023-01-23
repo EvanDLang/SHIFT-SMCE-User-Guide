@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'SHIFT SMCE User Guide'
-copyright = '2023, Evan Lang'
-author = 'Evan Lang'
+project = 'shift-smce-user-guide'
+copyright = '2023, Evan'
+author = 'Evan'
 
 # The full version, including alpha/beta/rc tags
 release = '0.0.1'

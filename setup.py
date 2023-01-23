@@ -6,15 +6,15 @@ with open(path.join(this_dir, "README.md")) as f:
     long_description = f.read()
 
 __version__ = "0.0.1"
-for line in open(path.join("SHIFT-SMCE-User-Guide", "__init__.py")):
+for line in open(path.join("shift-smce-user-guide", "__init__.py")):
     if line.startswith("__version__"):
         exec(line.strip())
 
 setup(
-    name="SHIFT-SMCE-User-Guide",
+    name="shift-smce-user-guide",
     version=__version__,
-    description="SHIFT-SMCE-User-Guide",
-    url="https://github.com/EvanDLang/SHIFT-SMCE-User-Guide",
+    description="shift-smce-user-guide",
+    url="https://github.com/EvanDLang/shift-smce-user-guide",
     author="Evan Lang",
     author_email="evan.d.lang@nasa.gov",
     classifiers=[

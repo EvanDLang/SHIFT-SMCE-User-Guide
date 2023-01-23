@@ -1,4 +1,4 @@
-{% set name = "SHIFT-SMCE-User-Guide" %}
+{% set name = "shift-smce-user-guide" %}
 {% set version = "0.0.1" %}
 
 package:
@@ -21,7 +21,7 @@ requirements:
 
 test:
   imports:
-    - testing
+    - shift-smce-user-guide
 
 about:
   home: HOMEPAGE
