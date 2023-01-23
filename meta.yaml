@@ -2,11 +2,11 @@
 {% set version = "0.0.1" %}
 
 package:
-  name: "{{ name|lower }}"
-  version: "{{ version }}"
+  name: "{{ Shift SMCE User Guide|shift-smce-user-guide }}"
+  version: "{{ 0.01 }}"
 
 source:
-  git_url: GIT_URL
+  git_url: https://github.com/EvanDLang/shift-smce-user-guide
 
 build:
   number: 0
@@ -24,12 +24,12 @@ test:
     - shift-smce-user-guide
 
 about:
-  home: HOMEPAGE
+  home: https://shift-smce-user-guide.readthedocs.io/en/latest/
   license: GPLv3
   license_family: GPL3
   license_file: LICENSE
-  summary: SUMMARY
+  summary: Documentation for SHIFT SMCE
 
 extra:
   recipe-maintainers:
-    - USERNAME
+    - EvanDLang
