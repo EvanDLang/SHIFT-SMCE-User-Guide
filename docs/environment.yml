@@ -8,3 +8,5 @@ dependencies:
   - ipython_genutils
   - ipython
   - ipywidgets
+  - myst-parser
+

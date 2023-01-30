@@ -1,6 +1,6 @@
-==========================
+===========================
 SHIFT SMCE Parallel Cluster
-==========================
+===========================
 
 Getting Access
 ==============
@@ -41,7 +41,7 @@ To access the cluster from the command line open up a fresh terminal and use the
 
 ::
 
-    ssh -i <path-to-private-key> <user-name>@XX.XXX.XX.XXX
+    ssh -i <path-to-private-key> <user-name>@35.161.53.237
 
 Putty and WinSCP (Recommended)
 ------------------------------
@@ -75,7 +75,7 @@ can be found in the NASA OCIO Software Center.
 
 |
 
-5. Enter in your user and host name (1) (username@xx.xxx.xx.xxx).
+5. Enter in your user and host name (1) (`username@35.161.53.237`).
 
 6. Using the navigation bar go to SSH and click on Auth.
 
@@ -125,12 +125,24 @@ files from your local machine to the server. WinSCP can be found in the NASA OCI
 
 Storage Options
 ===============
-home directory
 
-Submitting Jobs
-===============
+Home directory
+--------------
 
-https://slurm.schedmd.com/tutorials.html
+    Your root directory; full path is `/home/your-username`. This is regular file-system storage.
+    It is private to your user, but is limited in terms of space, so use this sparingly.
+    It is technically persistent across sessions, but we are still fiddling with it under the hood so don’t
+    store anything here you wouldn’t be too upset about suddenly losing.
+
+EFS
+---
+
+    The path is /efs. This is regular file-system storage.
+    This is shared across all users, but if you use this, you are strongly recommended
+    to create user and/or sub-project-specific subdirectories here to keep things organized.
+    This is technically unlimited, but is on a pay-for-what-you-use model, so please use responsibly.
+    It is more expensive and, usually, somewhat less performant than S3.
+
 
 Managing Environments
 =====================
@@ -166,4 +178,53 @@ downloading any Python packages.**
 
 See :ref:`venv` to create your own Conda environment.
 
-|
+Submitting Jobs
+===============
+
+To perform a computing task on the cluster, a shell script is submitted using Slurm.
+Slurm is an open source, scalable cluster management and job scheduling
+system.
+
+Slurm Shell Script
+------------------
+
+Here is an example of a simple slurm script.
+
+::
+
+    #!/bin/bash
+    #SBATCH -N 1      # number of nodes
+    #SBATCH --array=1-10
+    #SBATCH -J job_name
+    #SBATCH --mem=128  # memory in Mb
+    #SBATCH -o outfile  # send stdout to outfile
+    #SBATCH -e errfile  # send stderr to errfile
+    #SBATCH -t 0:02:00  # time requested in hour:minute:second
+
+
+    eval "$(conda shell.bash hook)" # activates conda
+    conda activate <your-conda-env> # activates your virtual environment
+    python your_script.py ${SLURM_ARRAY_TASK_ID} # runs a python script passing the array id as an argument
+
+
+Once you have your shell script you can submit a job to the cluster.
+
+::
+
+    sbatch your_script.sh
+
+Other helpful commands.
+
+::
+
+    # To view the job queue use the following command
+    squeue
+
+    # Get information about the nodes
+    sinfo
+
+
+
+For additional information on slurm checkout the `documentation`_!
+
+    .. _documentation: https://slurm.schedmd.com/

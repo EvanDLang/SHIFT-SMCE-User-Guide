@@ -1,7 +1,7 @@
 ## Questions
-Before you ask a question, it is best to search for existing [Issues](https://github.com/EvanDLang/SHIFT-SMCE-User-Guide/issues) that might help you. In case you have found a suitable issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
-
-If you then still feel the need to ask a question and need clarification, we recommend the following:
+Questions can be submitted [here](https://github.com/EvanDLang/SHIFT-SMCE-User-Guide/issues) 
+Before you ask a question, it is best to search for 
+existing that might help you. To as a question:
 
 - Open an [Issue](https://github.com/EvanDLang/SHIFT-SMCE-User-Guide/issues/new).
 - Provide as much context as you can about what you're running into.
@@ -14,7 +14,7 @@ We will then take care of the issue as soon as possible.
 
 ### Suggesting Enhancements
 
-If you have suggestions on how to improve the documentation visit  [GitHub issues](/issues) to  make suggestions
+If you have suggestions on how to improve the documentation visit  [GitHub issues](https://github.com/EvanDLang/SHIFT-SMCE-User-Guide/issues) to  make suggestions
 
 
 ### Contributions

@@ -5,17 +5,17 @@ Storage Options
 Users currently have the following storage options:
 
 Home directory
-==============
+--------------
 
     Appears as `/` in the file browser; full path is `/home/jovyan`. This is regular file-system storage. It is private to your user, but is limited in terms of space, so use this sparingly. It is technically persistent across sessions, but we are still fiddling with it under the hood so don’t store anything here you wouldn’t be too upset about suddenly losing.
 
 EFS
-===
+---
 
     Appears as `efs` in the file browser (relative to the home directory); full path is `/home/jovyan/efs`. This is regular file-system storage. This is shared across all users, but if you use this, you are strongly recommended to create user and/or sub-project-specific subdirectories here to keep things organized. This is technically unlimited, but is on a pay-for-what-you-use model, so please use responsibly. It is more expensive and, usually, somewhat less performant than S3.
 
 S3 buckets
-==========
+----------
 
     Appears in the bucket browser, not the file browser. These are object-based stores, not file system stores, so they are accessed somewhat differently, especially from code. Like EFS, these are “pay-for-what-you-use”. See “Working with datasets” below. There are 3 buckets that you should work on:
 
