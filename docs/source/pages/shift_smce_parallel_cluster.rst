@@ -7,44 +7,43 @@ Getting Access
 In order to get access a request must be submitted to the SMCE admin team after
 creating an ssh key pair, reviewing the SMCE training materials, and signing the user agreement
 
-1. Read through the following training documents.
+..
+    #. Read through the following training documents.
 
-    * :download:`2022 SMCE_Elevated Privileges Security Training <../pdfs/2022_SMCE_Elevated_Privileges_Security_Training.pdf>`
+        * :download:`2022 SMCE_Elevated Privileges Security Training <../pdfs/2022_SMCE_Elevated_Privileges_Security_Training.pdf>`
 
-    * :download:`2022 SMCE General Security Training <../pdfs/2022_SMCE_General_Security_Training.pdf>`
+        * :download:`2022 SMCE General Security Training <../pdfs/2022_SMCE_General_Security_Training.pdf>`
 
-2. Sign the SMCE User Agreement.
+    #. Sign the SMCE User Agreement.
 
-    * :download:`2022 SMCE User Agreement <../pdfs/2022_SMCE_User_Agreement.pdf>`
+        * :download:`2022 SMCE User Agreement <../pdfs/2022_SMCE_User_Agreement.pdf>`
+..
 
-
-
-3. Open a terminal and create a ssh key pair (public and private) with:
+1. Open a terminal and create a ssh key pair (public and private) with:
 
 ::
 
     ssh-keygen
 
-4. Email smce-admin@lists.nasa.gov, and attach the public key **NOT PRIVATE**
-(your public key should have a .pub extension and your private key should be a text file)
-and your signed user agreement.
 
-5. An administrator will contact you when you have been grated access to the system.
+2. Email smce-admin@lists.nasa.gov, and attach the public key **NOT PRIVATE** (your public key should have a .pub extension and your private key should be a text file).
+
+3. An administrator will contact you when you have been grated access to the system.
 
 Connecting and Logging In
 =========================
 
 
-Command Line Access
--------------------
+Command Line Access (Mac, Linux and Windows)
+--------------------------------------------
 To access the cluster from the command line open up a fresh terminal and use the following command.
 
 ::
 
     ssh -i <path-to-private-key> <user-name>@35.161.53.237
 
-Putty and WinSCP (Recommended)
-------------------------------
+Putty and WinSCP (Windows only)
+-------------------------------
 
 Putty
 ^^^^^
@@ -134,6 +133,10 @@ Home directory
     It is technically persistent across sessions, but we are still fiddling with it under the hood so don’t
     store anything here you wouldn’t be too upset about suddenly losing.
 
+    permanent
+    have a back up 75 gb
+    not available through shift smce jupiter lab
+
 EFS
 ---
 
@@ -143,35 +146,39 @@ EFS
     This is technically unlimited, but is on a pay-for-what-you-use model, so please use responsibly.
     It is more expensive and, usually, somewhat less performant than S3.
 
+    accessible through smce juipter lab
+    unlimited essentiaally, pay as you go
+
+data
+----
+    permanent
+    shared
+    have a back up 500 gb
+    not available through shift smce jupiter lab
+
+shared
+------
+
+    shared
+    have a back up xx gb
+    not available through shift smce jupiter lab
+
+S3
+--
+
+    accessed through the aws cli s3 command (WIP)
 
 Managing Environments
 =====================
 
-In order to start up a conda environment open .bashrc using a text editor. Copy and paste
-the following code at the bottom of the file and save. Log out and back in and the conda
-base environment should start.
+In order to start up a conda environment run the following command.
 
 ::
 
-    # >>> conda initialize >>>
-    # !! Contents within this block are managed by 'conda init' !!
-    __conda_setup="$('/data/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-    if [ $? -eq 0 ]; then
-        eval "$__conda_setup"
-    else
-        if [ -f "/data/miniconda3/etc/profile.d/conda.sh" ]; then
-            . "/data/miniconda3/etc/profile.d/conda.sh"
-        else
-            export PATH="/data/miniconda3/bin:$PATH"
-        fi
-    fi
-    unset __conda_setup
+    /data/miniconda3/bin/conda/init
 
-    if [ -f "/data/miniconda3/etc/profile.d/mamba.sh" ]; then
-        . "/data/miniconda3/etc/profile.d/mamba.sh"
-    fi
-    # <<< conda initialize <<<
 
+Log out and back in and the Conda base environment will start.
 
 **Note: Make sure to create your own environment and activate it before
 downloading any Python packages.**
@@ -185,26 +192,116 @@ To perform a computing task on the cluster, a shell script is submitted using Sl
 Slurm is an open source, scalable cluster management and job scheduling
 system.
 
+There are several different Slurm queues available for use depending on the resources required for a specific job.
+There are two different types of instances (spot vs demand) available with 3 different levels of computing resources.
+See :ref:`resource_table`.
+
+Spot instances request unused or spare Amazon EC2 instances at steep discounts and runs whenever capacity is available.
+These are good for tasks that are flexible/short and interruptable.
+
+On demand instances are more expensive, but are more suited for tasks that do not have as much flexibility, are longer and cannot be interrupted.
+
+The default instance used is c5n.4xlarge - spot. The sbatch partition argument is used to specify a particular instance type/size (see below).
+
+.. _resource_table:
+
+.. list-table:: Available Instances (Spot or Demand)
+   :widths: 30 15 15 15 15
+   :header-rows: 1
+
+   * - Instance Name
+     - vCPU
+     - RAM
+     - EBS Bandwidth
+     - Network Bandwidth
+   * - c5n.4xlarge
+     - 16
+     - 42 GiB
+     - 3.5 Gbps
+     - Up to 25 Gbps
+   * - c5n.9xlarge
+     - 36
+     - 96 GiB
+     - 7 Gbps
+     - 50 Gbps
+   * - c5n.18xlarge
+     - 72
+     - 192 GiB
+     - 14 Gbps
+     - 100 Gbps
+
+
+
+
+
 Slurm Shell Script
 ------------------
 
-Here is an example of a simple slurm script.
+The easiest way to submit a job to the Slurm queue is to use a shell script. Below
+is an example of a simple script. See :ref:`arg_table` for more details about each argument.
 
 ::
 
     #!/bin/bash
-    #SBATCH -N 1      # number of nodes
+    #SBATCH --nodes 1      # number of nodes
+    #SBATCH --partition c5n.9xlarge-spot # partition
     #SBATCH --array=1-10
-    #SBATCH -J job_name
-    #SBATCH --mem=128  # memory in Mb
-    #SBATCH -o outfile  # send stdout to outfile
-    #SBATCH -e errfile  # send stderr to errfile
-    #SBATCH -t 0:02:00  # time requested in hour:minute:second
+    #SBATCH --job-name job_name
+    #SBATCH --mem=512  # memory in Mb per node
+    #SBATCH --output outfile  # send stdout to outfile
+    #SBATCH --error errfile  # send stderr to errfile
+    #SBATCH --time 0:02:00  # time requested in hour:minute:second
 
 
-    eval "$(conda shell.bash hook)" # activates conda
+    eval "$(conda shell.bash hook)" # activates conda base environment
     conda activate <your-conda-env> # activates your virtual environment
     python your_script.py ${SLURM_ARRAY_TASK_ID} # runs a python script passing the array id as an argument
+
+.. _arg_table:
+
+.. list-table:: Common SBATCH Arguments
+   :widths: 30 70
+   :header-rows: 1
+
+   * - Argument
+     - Description
+   * - \--job-name (-J)
+     - Specify a name for the job allocation.
+   * - \--output (-o)
+     - | Instruct Slurm to connect the batch script's standard output directly
+       | to the file name specified in the "filename pattern".
+   * - \--error (-e)
+     - | Instruct Slurm to connect the batch script's standard error directly
+       | to the file name specified in the "filename pattern".
+   * - \--nodes (-N)
+     - Request that a minimum of minnodes nodes be allocated to this job.
+   * - \--partition (-P)
+     - | Request a specific partition for the resource allocation. If not
+       | specified, the default behavior is to allow the slurm controller to
+       | select the default partition as designated by the system administrator.
+   * - \--ntasks
+     - | sbatch does not launch tasks, it requests an allocation of resources
+       | and submits a batch script. This option advises the Slurm controller
+       | that job steps run within the allocation will launch a maximum of number
+       | tasks and to provide for sufficient resources.
+   * - \--cpus-per-task
+     - | Advise the Slurm controller that ensuing job steps will require ncpus number
+       | of processors per task. Without this option, the controller will just try to
+       | allocate one processor per task.
+   * - \--mem-per-cpu
+     - | Minimum memory required per usable allocated CPU. Default units are
+       | megabytes.
+   * - \--time
+     - Set a limit on the total run time of the job allocation.
+   * - \--mail-user
+     - | User to receive email notification of state changes as defined by --mail-type.
+       | The default value is the submitting user.
+   * - \--mail-type
+     - | Notify user by email when certain event types occur. Valid type values are NONE,
+       | BEGIN, END, FAIL, REQUEUE, ALL. See documentation for a complete list.
+   * - \--get-user-env
+     - | This option will tell sbatch to retrieve the login environment variables for the user
+       | specified in the --uid option.
 
 
 Once you have your shell script you can submit a job to the cluster.
@@ -225,6 +322,6 @@ Other helpful commands.
 
 
 
-For additional information on slurm checkout the `documentation`_!
+For additional information on Slurm checkout the `documentation`_!
 
     .. _documentation: https://slurm.schedmd.com/
