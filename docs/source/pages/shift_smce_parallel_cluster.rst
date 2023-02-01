@@ -128,14 +128,10 @@ Storage Options
 Home directory
 --------------
 
-    Your root directory; full path is `/home/your-username`. This is regular file-system storage.
-    It is private to your user, but is limited in terms of space, so use this sparingly.
-    It is technically persistent across sessions, but we are still fiddling with it under the hood so don’t
-    store anything here you wouldn’t be too upset about suddenly losing.
+    Your root directory; full path is `/userhome/your-username`. This is regular file-system storage.
+    It is private to your user, but is limited to 75 GB of storage so use this sparingly. This cannot
+    be accessed through the SHIFT SMCE Jupyter Lab environment.
 
-    permanent
-    have a back up 75 gb
-    not available through shift smce jupiter lab
 
 EFS
 ---
@@ -144,29 +140,50 @@ EFS
     This is shared across all users, but if you use this, you are strongly recommended
     to create user and/or sub-project-specific subdirectories here to keep things organized.
     This is technically unlimited, but is on a pay-for-what-you-use model, so please use responsibly.
-    It is more expensive and, usually, somewhat less performant than S3.
+    This can be accessed by both the cluster and the Jupyter Lab environment.
 
-    accessible through smce juipter lab
-    unlimited essentiaally, pay as you go
 
-data
+Data
 ----
-    permanent
-    shared
-    have a back up 500 gb
-    not available through shift smce jupiter lab
+    The full path is /data. This is regular file-system storage.
+    This is shared across all users, but if you use this, you are strongly recommended
+    to create user and/or sub-project-specific subdirectories here to keep things organized.
+    The size is 500 GB and things stored here cannot be accessed from the SHIFT SMCE Jupyter
+    Lab environment.
 
-shared
+Shared
 ------
-
-    shared
-    have a back up xx gb
-    not available through shift smce jupiter lab
+    The full path is /shared. This is regular file-system storage.
+    This is shared across all users, but if you use this, you are strongly recommended
+    to create user and/or sub-project-specific subdirectories here to keep things organized.
+    The size is only 50 GB and things stored here cannot be accessed from the SHIFT SMCE Jupyter
+    Lab environment.
 
 S3
 --
+    The S3 buckets are accessible from the compute nodes. See :ref:`s3_buckets` for more details.
+    To access the buckets without submitting a Slurm job, you can ssh directly into a node
+    using the following commands:
 
-    accessed through the aws cli s3 command (WIP)
+    ::
+
+        # launch an interactive session on a c5n4xlarge spot compute node
+        salloc -N 1 -p shift-c5n4xlarge-spot
+
+        # Check the job status every 5 seconds to see when the ST
+        # field switches to R indicating that the node is available
+        watch -n 5 squeue
+
+        # Ssh into the node via the name provided under the NODELIST column of the
+        # squeue output (e.g. shift-c5n4xlarge-spot-dy-c5n4xlarge-1)
+        ssh shift-c5n4xlarge-spot-dy-c5n4xlarge-X
+
+        # list available buckets
+        aws s3 ls
+
+
+
+
 
 Managing Environments
 =====================

@@ -47,6 +47,9 @@ Creating a New Conda Environment
     #Create a clean Conda environment
     conda create --name <your-env-name> python --no-default-package
 
+    #Create a Conda environment with a specific version of python
+    conda create --name <your-env-name> python=3.9 ipython
+
 * Activate your new environment and install ipykernel and other packages
 
 ::
@@ -79,3 +82,7 @@ More information can be found in the `Conda`_  and `Jupyter Lab`_ documentation!
 
     .. _Conda: https://conda.io/projects/conda/en/latest/index.html
     .. _Jupyter Lab: https://jupyterlab.readthedocs.io/en/stable/index.html
+
+
+
+
