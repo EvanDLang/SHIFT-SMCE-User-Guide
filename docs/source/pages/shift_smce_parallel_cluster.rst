@@ -162,7 +162,9 @@ Shared
 S3
 --
     The S3 buckets are accessible from the compute nodes. See :ref:`s3_buckets` for more details.
-    To access the buckets without submitting a Slurm job, you can ssh directly into a node
+
+..
+    To access the buckets without submitting a Slurm job you can ssh directly into a node
     using the following commands:
 
     ::
@@ -174,16 +176,14 @@ S3
         # field switches to R indicating that the node is available
         watch -n 5 squeue
 
-        # Ssh into the node via the name provided under the NODELIST column of the
+        # ssh into the node via the name provided under the NODELIST column of the
         # squeue output (e.g. shift-c5n4xlarge-spot-dy-c5n4xlarge-1)
         ssh shift-c5n4xlarge-spot-dy-c5n4xlarge-X
 
         # list available buckets
         aws s3 ls
 
-
-
-
+..
 
 Managing Environments
 =====================
