@@ -20,11 +20,13 @@ In addition, you can create your own kernels which with new conda environments w
 You can change the kernel of any notebook by clicking the kernel name (default: "Python 3 (ipykernel)") in the top right corner of the notebook interface.
 
 Setting Up a New Kernel
-=======================
+-----------------------
 The process for setting up a kernel starts with configuring a new virtual environment.
 
+.. _venv:
+
 Creating a New Conda Environment
-================================
+--------------------------------
 * Open a new terminal
 * Deactivate the current Conda environment
 
@@ -45,6 +47,9 @@ Creating a New Conda Environment
     #Create a clean Conda environment
     conda create --name <your-env-name> python --no-default-package
 
+    #Create a Conda environment with a specific version of python
+    conda create --name <your-env-name> python=3.9 ipython
+
 * Activate your new environment and install ipykernel and other packages
 
 ::
@@ -62,7 +67,7 @@ Creating a New Conda Environment
 
 
 Kernel Management
-=================
+-----------------
 
 ::
 
@@ -77,3 +82,7 @@ More information can be found in the `Conda`_  and `Jupyter Lab`_ documentation!
 
     .. _Conda: https://conda.io/projects/conda/en/latest/index.html
     .. _Jupyter Lab: https://jupyterlab.readthedocs.io/en/stable/index.html
+
+
+
+
