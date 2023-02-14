@@ -188,11 +188,12 @@ S3
 Managing Environments
 =====================
 
-In order to start up a conda environment run the following command.
+In order to start up a conda environment run the following commands.
 
 ::
 
-    /data/miniconda3/bin/conda/init
+    cd /data/miniconda3/bin
+    ./conda init
 
 
 Log out and back in and the Conda base environment will start.
