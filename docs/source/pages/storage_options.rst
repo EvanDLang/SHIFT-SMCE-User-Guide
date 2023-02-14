@@ -8,7 +8,7 @@ Home directory
 --------------
 
     Appears as `/` in the file browser; full path is `/home/jovyan`.
-    This is regular file-system storage. It is private to your user, but is limited in terms of space,
+    This is regular file-system storage. It is private to your user, but is limited in terms of space (10GB),
     so use this sparingly. It is persistent across sessions,
     but we recommend making sure all important files are backed up.
 
@@ -31,6 +31,9 @@ S3 buckets
     not file system stores, so they are accessed somewhat differently, especially from code. Like EFS,
     these are “pay-for-what-you-use”. See “Working with datasets” below. There are 3 buckets that you should work on:
 
+    **These buckets are mounted, but are technically READ ONLY. Do not attempt to write to them or they
+    will crash.**
+
     * dh-shift-curated
 
             This is where processed and organized datasets from the SHIFT campaign are located.
@@ -52,17 +55,12 @@ S3 buckets
 
     * NOTE 1:
 
-        These buckets are mounted, but are technically **READ ONLY**, Do not attempt to write to them as it will cause
-        issues.
-
-    * NOTE 2:
-
         Jupyter notebooks natively support editing and execution from inside S3 buckets.
         There isn’t a one-click button for creating a notebook in S3, so the workflow is to take an
         existing blank notebook, copy it, and then work from the copy. For specific instructions,
         take a look at `/dh-shift-shared/notebook-template.ipynb` (which you can find in the S3 browser).
 
-    * NOTE 3:
+    * NOTE 2:
 
         EFS and S3 buckets have effectively unlimited storage, but are on a “pay-for-what-you-use” model.
         That means that SBG is charged per GB-hour of storage on these devices: Storing 1 GB of data for 1 hour costs
