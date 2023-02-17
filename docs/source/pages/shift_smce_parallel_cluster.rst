@@ -142,6 +142,8 @@ EFS
     This is technically unlimited, but is on a pay-for-what-you-use model, so please use responsibly.
     This can be accessed by both the cluster and the Jupyter Lab environment.
 
+    **Read the information about directory and file** :ref:`permissions` **if you plan on using EFS storage**
+
 
 Data
 ----
