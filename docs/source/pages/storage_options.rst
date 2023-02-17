@@ -12,6 +12,8 @@ Home directory
     so use this sparingly. It is persistent across sessions,
     but we recommend making sure all important files are backed up.
 
+
+
 EFS
 ---
 
@@ -21,6 +23,28 @@ EFS
     subdirectories here to keep things organized. This is technically unlimited,
     but is on a pay-for-what-you-use model, so please use responsibly.
     It is more expensive and, usually, somewhat less performant than S3.
+
+.. _permissions:
+
+Permissions
+^^^^^^^^^^^
+
+    The default permission are 755 and 644 meaning the owner can read/write/execute. The group and others can only
+    read and execute, but not write. However, if you plan on accessing EFS storage from a different system, such as the SHIFT cluster, and would like to write to the
+    EFS directories/files you created on Daskhub or vice versa the permissions for each directory/file will need to be updated.
+
+
+    A combination of the following two commands can be used to change directory/file permissions:
+
+    #. Using :code:`chmod 775` for directories or :code:`chmod 664` for files (owner read/write/execute, group read/write/execute, others read/execute) on the system where the directory/file was created will change the permissions so they it accessible
+       from both. **Chmod is used to update permissions for directories or files that have already been created.** The command needs to be used to change the permissions for each directory (will update all files in the
+       directory) or for each individual file you would like to access from both systems.
+
+    #. Using the umask command you can change the default permissions set for each directory or file **upon creation**.
+       running :code:`umask 002` will give you the same permissions as chmod 775/664. This command will have to be run each time you
+       log in. To make this change permanent, add the command to your .bashrc file in your
+       root directory and it will automatically run everytime you log in. **This has to be done on both the cluster, Daskhub or any system accessing EFS storage.**
+       This command will not update the permissions for files/directories that have already been created.
 
 .. _s3_buckets:
 
