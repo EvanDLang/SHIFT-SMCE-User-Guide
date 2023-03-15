@@ -37,7 +37,7 @@ Permissions
     A combination of the following two commands can be used to change directory/file permissions:
 
     #. Using :code:`chmod 775` for directories or :code:`chmod 664` for files (owner read/write/execute, group read/write/execute, others read/execute) on the system where the directory/file was created will change the permissions so they it accessible
-       from both. **Chmod is used to update permissions for directories or files that have already been created.** The command needs to be used to change the permissions for each directory (will update all files in the
+       from both. **Chmod is used to update permissions for directories or files that have already been created.** The command needs to be used to change the permissions for each directory (including -R will update all files in the
        directory) or for each individual file you would like to access from both systems.
 
     #. Using the umask command you can change the default permissions set for each directory or file **upon creation**.

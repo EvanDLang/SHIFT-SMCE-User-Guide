@@ -5,7 +5,7 @@ This notebooks shows examples of how to perform a PCA and use several common clu
 
 Follow this `link`_ to open an interactive notebook and select the kernel named notebook.
     
-    .. _link: https://daskhub.shift.mysmce.com/user/edlang1/pasarela/open?url=https://raw.githubusercontent.com/EvanDLang/SHIFT-SMCE-User-Guide/development/docs/source/notebooks/clustering_example.ipynb
+    .. _link: https://daskhub.shift.mysmce.com/user/edlang1/pasarela/open?url=https://raw.githubusercontent.com/EvanDLang/SHIFT-SMCE-User-Guide/development/docs/source/notebooks/clustering_examples.ipynb
 
 ::
 
