@@ -10,8 +10,10 @@ This user guide has several example notebooks of working with AVIRIS data which 
    :maxdepth: 2
 
    ../notebooks/xarray_basics
-   ../notebooks/clustering_examples
    ../notebooks/visualizing_data
+   ../notebooks/raster_operations
+   ../notebooks/clustering_examples
+
    
 
 
