@@ -13,8 +13,8 @@ This user guide has several example notebooks of working with AVIRIS data which 
    ../notebooks/visualizing_data
    ../notebooks/raster_operations
    ../notebooks/clustering_examples
-
    
 
+Some example code for working with AVIRIS data is in the ‘dh-shift-shared/notebook-template.ipynb’ notebook. Additional examples can be found here: https://github.com/marinadunn/SHIFT-STAC-demo; specifically, take a look at this `notebook`_.
 
-Some example code for working with AVIRIS data is in the ‘dh-shift-shared/notebook-template.ipynb’ notebook. Additional examples are here: https://github.com/marinadunn/SHIFT-STAC-demo; specifically, take a look at this [notebook](https://github.com/dieumynguyen/SHIFT-STAC-demo/blob/main/data_visualization_demo.ipynb).
+    .. _notebook: https://github.com/dieumynguyen/SHIFT-STAC-demo/blob/main/data_visualization_demo.ipynb
