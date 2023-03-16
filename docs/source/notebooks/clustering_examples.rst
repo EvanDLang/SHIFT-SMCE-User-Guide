@@ -3,9 +3,15 @@ Clustering Example
 
 This notebooks shows examples of how to perform a PCA and use several common clustering algorithms.
 
-Follow this `link`_ to open an interactive notebook and select the kernel named notebook.
+Open an interactive notebook:
+
+#. Sign into the SHIFT SMCE Daskhub and select an instance size in different tab
+
+#. Follow this `link`_
+
+#. Select the "notebook" kernel
     
-    .. _link: https://daskhub.shift.mysmce.com/user/edlang1/pasarela/open?url=https://raw.githubusercontent.com/EvanDLang/SHIFT-SMCE-User-Guide/development/docs/source/notebooks/clustering_examples.ipynb
+    .. _link: https://daskhub.shift.mysmce.com/user/joyvan/pasarela/open?url=https://raw.githubusercontent.com/EvanDLang/SHIFT-SMCE-User-Guide/development/docs/source/notebooks/clustering_examples.ipynb
 
 ::
 
