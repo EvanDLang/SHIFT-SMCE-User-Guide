@@ -7,18 +7,6 @@ Getting Access
 In order to get access a request must be submitted to the SMCE admin team after
 creating an ssh key pair, reviewing the SMCE training materials, and signing the user agreement
 
-..
-    #. Read through the following training documents.
-
-        * :download:`2022 SMCE_Elevated Privileges Security Training <../pdfs/2022_SMCE_Elevated_Privileges_Security_Training.pdf>`
-
-        * :download:`2022 SMCE General Security Training <../pdfs/2022_SMCE_General_Security_Training.pdf>`
-
-    #. Sign the SMCE User Agreement.
-
-        * :download:`2022 SMCE User Agreement <../pdfs/2022_SMCE_User_Agreement.pdf>`
-..
-
 1. Open a terminal and create a ssh key pair (public and private) with:
 
 ::
