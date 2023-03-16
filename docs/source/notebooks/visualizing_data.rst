@@ -8,7 +8,7 @@ Additional information can be found in the `Holoviews`_ user guide.
 
 Open an interactive notebook:
 
-#. Sign into the SHIFT SMCE Daskhub and select an instance size in different tab
+#. Sign into the SHIFT SMCE Daskhub and select an instance size in a different tab
 
 #. Follow this `link`_
 

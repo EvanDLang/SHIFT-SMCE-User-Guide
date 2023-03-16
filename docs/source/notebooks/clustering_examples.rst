@@ -5,7 +5,7 @@ This notebooks shows examples of how to perform a PCA and use several common clu
 
 Open an interactive notebook:
 
-#. Sign into the SHIFT SMCE Daskhub and select an instance size in different tab
+#. Sign into the SHIFT SMCE Daskhub and select an instance size in a different tab
 
 #. Follow this `link`_
 
