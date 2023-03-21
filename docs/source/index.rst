@@ -13,6 +13,7 @@ This document serves comprehensive guide to working in the SHIFT SMCE environmen
    pages/working_with_datasets
    pages/downloading_datasets
    pages/shift_smce_parallel_cluster
+   pages/working_with_other_data
    pages/known_issues
    pages/how_to_contribute
 
