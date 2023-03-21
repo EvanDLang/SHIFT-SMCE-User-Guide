@@ -14,7 +14,8 @@ Open an interactive notebook:
     .. _link: https://daskhub.shift.mysmce.com/user/joyvan/pasarela/open?url=https://raw.githubusercontent.com/EvanDLang/SHIFT-SMCE-User-Guide/development/docs/source/notebooks/clustering_examples.ipynb
 
 ::
-
+    
+    from shift_python_utilities.intake_shift import shift_catalog
     import xarray as xr
     import pandas as pd
     from sklearn.decomposition import PCA
@@ -31,11 +32,15 @@ Pre-processing
 
 ::
 
-    # Read in the data
-    ds = xr.open_dataset("reference://", engine="zarr", backend_kwargs={
-        "consolidated": False,
-        "storage_options": {"fo": "s3://dh-shift-curated/aviris/v1/gridded/zarr.json"}
-    })
+    # Read in the data using the shift python utilities library
+    cat = shift_catalog()
+    ds = cat.aviris_v1_gridded.read_chunked()
+
+    # Read the data in from s3 dh-shift-curated
+    # ds = xr.open_dataset("reference://", engine="zarr", backend_kwargs={
+    #     "consolidated": False,
+    #     "storage_options": {"fo": "s3://dh-shift-curated/aviris/v1/gridded/zarr.json"}
+    # })
 
     # Subset the data using the select method
     aoi = ds.sel(x=slice(730300,731000), y=slice(3819660,3819050), time="2022-03-08")

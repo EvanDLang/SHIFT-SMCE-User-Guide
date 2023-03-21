@@ -18,7 +18,8 @@ Open an interactive notebook:
 
 
 ::
-
+    
+    from shift_python_utilities.intake_shift import shift_catalog
     import xarray as xr
     import rioxarray as rxr
     import math
@@ -62,18 +63,22 @@ Open an interactive notebook:
 
 ::
 
-    ds = xr.open_dataset("reference://", engine="zarr", backend_kwargs={
-        "consolidated": False,
-        "storage_options": {"fo": "s3://dh-shift-curated/aviris/v1/gridded/zarr.json"}
-    })
+    # Read in the data using the shift python utilities library
+    cat = shift_catalog()
+    ds = cat.aviris_v1_gridded.read_chunked()
 
-    
+    # Data can also be oppened using xarray
+    # ds = xr.open_dataset("reference://", engine="zarr", backend_kwargs={
+    #     "consolidated": False,
+    #     "storage_options": {"fo": "s3://dh-shift-curated/aviris/v1/gridded/zarr.json"}
+    # })
+
+    # Data can be oppened using rioxarray, however the xarray coordinates and data variables might use different names
+    # ds = rxr.open_rasterio("/efs/efs-data-curated/v1/20220308/L2a/ang20220308t184127_rfl")
+
     # Subset the data using the select method
     aoi = ds.sel(x=slice(730300,731000), y=slice(3819660,3819050), time="2022-03-08")
     aoi
-    
-    # Data can be oppened using rioxarray, however the xarray coordinates and data variables might use different names
-    # ds = rxr.open_rasterio("/efs/efs-data-curated/v1/20220308/L2a/ang20220308t184127_rfl")
     
 
 .. image:: ../images/data_visualization/xarray_data.jpg

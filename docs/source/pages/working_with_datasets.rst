@@ -9,6 +9,7 @@ This user guide has several example notebooks demonstrating how to work with AVI
 .. toctree::
    :maxdepth: 2
 
+   ../notebooks/intake_catalog_demo
    ../notebooks/xarray_basics
    ../notebooks/visualizing_data
    ../notebooks/raster_operations
