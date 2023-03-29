@@ -67,8 +67,6 @@ Pass Authentication to s3fs
                               secret=temp_creds_req['secretAccessKey'], 
                               token=temp_creds_req['sessionToken'])
                           
-::
-
 Access the data using rasterio or rioxarray
 
 ::

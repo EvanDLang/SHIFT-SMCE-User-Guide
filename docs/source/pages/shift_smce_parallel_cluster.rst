@@ -193,6 +193,8 @@ downloading any Python packages.**
 
 See :ref:`venv` to create your own Conda environment.
 
+.. _slurm:
+
 Submitting Jobs
 ===============
 
