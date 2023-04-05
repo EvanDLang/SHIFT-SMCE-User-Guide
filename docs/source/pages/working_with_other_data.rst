@@ -17,7 +17,7 @@ The EMIT team has put together a thorough set of tutorials on how to access and 
 - `Direct s3 access for EMIT Data <https://github.com/nasa/EMIT-Data::-Resources/blob/main/how-tos/How_to_Direct_S3_Access.ipynbL>`_
 
 
-- `Extracting and area from EMIT imagery <https://github.com/nasa/EMIT-Data-Resources/blob/main/how-tos/How_to_Extract_Area.ipynbL>`_
+- `Extracting an area from EMIT imagery <https://github.com/nasa/EMIT-Data-Resources/blob/main/how-tos/How_to_Extract_Area.ipynbL>`_
 
 
 
