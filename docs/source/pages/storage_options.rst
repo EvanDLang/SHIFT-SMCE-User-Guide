@@ -41,7 +41,7 @@ Permissions
        directory) or for each individual file you would like to access from both systems.
 
     #. Using the umask command you can change the default permissions set for each directory or file **upon creation**.
-       running :code:`umask 002` will give you the same permissions as chmod 775/664. This command will have to be run each time you
+       running :code:`umask 0002` will give you the same permissions as chmod 775/664. This command will have to be run each time you
        log in. To make this change permanent, add the command to your .bashrc file in your
        root directory and it will automatically run everytime you log in. **This has to be done on both the cluster, Daskhub or any system accessing EFS storage.**
        This command will not update the permissions for files/directories that have already been created.
