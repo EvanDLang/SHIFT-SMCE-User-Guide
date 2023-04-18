@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - given-names: Evan
+    family-names: Lang
+  - given-names: Yoseline
+    family-names: Angel
+  - given-names: Alexey Shiklomanov
+title: "SHIFT SMCE User Guide"
+license: Apache-2.0
+version: 2.0.0
+date-released: 2023-04-10
