@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - affiliation: NASA Goddard Space Flight Center / Science Systems and Applications Incorporated
+    family-names: Lang 
+    given-names: Evan
+  - affiliation: NASA Goddard Space Flight Center / University of Maryland College Park 
+    family-names: Angel 
+    given-names: Yoseline 
+  - affiliation: NASA Goddard Space Flight Center
+    family-names: Shiklomanov 
+    given-names: Alexey 
+    
+title: "SHIFT SMCE User Guide"
+license: Apache-2.0
+repository-code: https://github.com/EvanDLang/SHIFT-SMCE-User-Guide
+doi: 10.5281/zenodo.7842771
+version: 2.0.0
+date-released: 2023-04-10
