@@ -5,7 +5,7 @@ this_dir = path.abspath(path.dirname(__file__))
 with open(path.join(this_dir, "README.md")) as f:
     long_description = f.read()
 
-__version__ = "0.0.1"
+__version__ = "1.0.1"
 for line in open(path.join("shift-smce-user-guide", "__init__.py")):
     if line.startswith("__version__"):
         exec(line.strip())
