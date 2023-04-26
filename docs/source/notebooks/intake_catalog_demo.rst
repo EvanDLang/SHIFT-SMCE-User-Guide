@@ -20,18 +20,63 @@ Open an interactive notebook:
 
 ::
     
-    from shift_python_utilities.intake_shift import shift_catalog
     import math
     import numpy as np
     import matplotlib.pyplot as plt
     import xarray as xr
     import pandas as pd
+    import geopandas as gpd
+    import hvplot.pandas 
+    from shift_python_utilities.intake_shift import shift_catalog
     import holoviews as hv
     hv.extension('bokeh')
     import hvplot.xarray
     from sklearn.decomposition import PCA
     from sklearn.cluster import KMeans
-    
+    import warnings
+    warnings.filterwarnings("ignore")
+
+::
+
+    # Supporting Functions
+    def gamma_adjust(array):
+        # Rescale Values using gamma to adjust brightness
+        gamma = math.log(0.2)/math.log(np.nanmean(array)) # Create exponent for gamma scaling - can be adjusted by changing 0.2 
+        scaled = np.power(array,gamma).clip(0,1) # Apply scaling and clip to 0-1 range
+        scaled = np.nan_to_num(scaled, nan = 1) #Assign NA's to 1 so they appear white in plots
+        return scaled
+
+    def generate_rgb_plot(ds):
+        # Retreive red, green and blue wavelengths and convert them to numpy arrays
+        red = ds.sel(wavelength=650, method="nearest").reflectance
+        green = ds.sel(wavelength=560, method="nearest").reflectance
+        blue = ds.sel(wavelength=470, method="nearest").reflectance
+
+        # Scale the Bands
+        r = gamma_adjust(red)
+        g = gamma_adjust(green)
+        b = gamma_adjust(blue)
+
+        # Stack Bands and make an index
+        rgb = np.stack([r,g,b])
+        bds = np.array([0,1,2])
+
+        rgb.shape
+        # Pull x and y values
+        y = ds['lat'].values
+        x = ds['lon'].values
+        y.shape
+        x.shape
+        rgb.shape
+        # Create new rgb xarray data array.
+        data_vars = {'RGB':(['wavelength', 'lat', 'lon'], rgb)} 
+        coords = {'wavelength':(['wavelength'],bds), 'lat':(['lat'],y), 'lon':(['lon'],x)}
+        attrs = ds.attrs
+        ds_rgb = xr.Dataset(data_vars=data_vars, coords=coords, attrs=attrs)
+        ds_rgb.coords['lon'].attrs = ds['lon'].attrs
+        ds_rgb.coords['lat'].attrs = ds['lat'].attrs
+
+        return ds_rgb
 
 ::
     
@@ -80,7 +125,7 @@ Optional Arguments:
         [1, 2, 3, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425]
 
 
-- subset (dict, default: None): This argument allows you to subset the dataset by index (isel)
+- subset (dict, GeoDataFrame, default: None): This argument allows you to subset the dataset by index(x, and y), latitude and longitude, or with a shapefile formatted as a GeoPandas Dataframe. If using a shapefile, the ortho argument must be set to True.
 
 - chunks (dict, default: {'y': 1}): This argument controls how dask chunks up your array. I recommend using the default of chunking along the y dimension however, depending on what your computing, chunking differently my increase the performance.
 
@@ -132,49 +177,26 @@ In order to orthorectify a dataset using the GLT file, all you need to do is set
 Now that the data is orthorectified we can plot an RGB image of the scene.
 
 ::
-    
-    def gamma_adjust(array):
-        # Rescale Values using gamma to adjust brightness
-        gamma = math.log(0.2)/math.log(np.nanmean(array)) # Create exponent for gamma scaling - can be adjusted by changing 0.2 
-        scaled = np.power(array,gamma).clip(0,1) # Apply scaling and clip to 0-1 range
-        scaled = np.nan_to_num(scaled, nan = 1) #Assign NA's to 1 so they appear white in plots
-        return scaled
-    
-    # Retreive red, green and blue wavelengths and convert them to numpy arrays
-    red = ds.sel(wavelength=650, method="nearest").reflectance
-    green = ds.sel(wavelength=560, method="nearest").reflectance
-    blue = ds.sel(wavelength=470, method="nearest").reflectance
 
-    # Scale the Bands
-    r = gamma_adjust(red)
-    g = gamma_adjust(green)
-    b = gamma_adjust(blue)
-
-    # Stack Bands and make an index
-    rgb = np.stack([r,g,b])
-    bds = np.array([0,1,2])
-
-    rgb.shape
-    # Pull x and y values
-    y = ds['lat'].values
-    x = ds['lon'].values
-    y.shape
-    x.shape
-    rgb.shape
-    # Create new rgb xarray data array.
-    data_vars = {'RGB':(['wavelength', 'lat', 'lon'], rgb)} 
-    coords = {'wavelength':(['wavelength'],bds), 'lat':(['lat'],y), 'lon':(['lon'],x)}
-    attrs = ds.attrs
-    ds_rgb = xr.Dataset(data_vars=data_vars, coords=coords, attrs=attrs)
-    ds_rgb.coords['lon'].attrs = ds['lon'].attrs
-    ds_rgb.coords['lat'].attrs = ds['lat'].attrs
-    
+    ds_rgb = generate_rgb_plot(ds)
     rgb_image = ds_rgb.hvplot.rgb(x='lon', y='lat', bands='wavelength', aspect = 'equal', frame_width=600).opts(tools=["hover"])
     rgb_image
 
 .. image:: ../images/intake_examples/L2a_full_ortho_rgb.jpg
 
-Most of the scenes are too large to orthorectify the entire file. We are currently looking at methods to make the operation more memory efficient. In the meantime, you can use the subset operation to orthorectify an area of an image.
+
+Orthorectifying a Subset of a File
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Many of the SHIFT reflectance and radiance files are too large to orthorectify the entire scene. Using the subset argument a portion of the scene can be selected and orthorectified. As described above the subset argument can be used with:
+    
+    - x and y indicies
+    
+    - lat and lon values (using the correct CRS)
+    
+    - A shapefile formated as a GeoPandas dataframe (using the correct CRS)
+
+Orthorectifying using x and y indicies
 
 ::
 
@@ -185,40 +207,50 @@ Most of the scenes are too large to orthorectify the entire file. We are current
 
 ::
 
-    # Retreive red, green and blue wavelengths and convert them to numpy arrays
-    red = ds.sel(wavelength=650, method="nearest").reflectance
-    green = ds.sel(wavelength=560, method="nearest").reflectance
-    blue = ds.sel(wavelength=470, method="nearest").reflectance
-
-    # Scale the Bands
-    r = gamma_adjust(red)
-    g = gamma_adjust(green)
-    b = gamma_adjust(blue)
-
-    # Stack Bands and make an index
-    rgb = np.stack([r,g,b])
-    bds = np.array([0,1,2])
-
-    # Pull x and y values
-    y = ds['lat'].values
-    x = ds['lon'].values
-    y.shape
-    x.shape
-    rgb.shape
-    # Create new rgb xarray data array.
-    data_vars = {'RGB':(['wavelength', 'lat', 'lon'], rgb)} 
-    coords = {'wavelength':(['wavelength'],bds), 'lat':(['lat'],y), 'lon':(['lon'],x)}
-    attrs = ds.attrs
-    ds_rgb = xr.Dataset(data_vars=data_vars, coords=coords, attrs=attrs)
-    ds_rgb.coords['lon'].attrs = ds['lon'].attrs
-    ds_rgb.coords['lat'].attrs = ds['lat'].attrs
-    
+    ds_rgb = generate_rgb_plot(ds)
     rgb_image = ds_rgb.hvplot.rgb(x='lon', y='lat', bands='wavelength', aspect = 'equal', frame_width=600).opts(tools=["hover"])
     rgb_image
     
 .. image:: ../images/intake_examples/L2a_subset_ortho_rgb.jpg
 
-Using the igm File
+Orthorectifying using lat and lon
+
+::
+    
+    eastings = np.array([228610.68861488, 237298.11871802])
+    northings = np.array([3812959.0852389 , 3810526.08057343])
+    ds = cat.L2a(date=20220224, time=200332, ortho=True, filter_bands=True, subset={'lat':northings, "lon": eastings}).read_chunked()
+    ds
+
+.. image:: ../images/intake_examples/lat_lon_subset.jpg
+
+::
+
+    ds_rgb = generate_rgb_plot(ds)
+    rgb_image = ds_rgb.hvplot.rgb(x='lon', y='lat', bands='wavelength', aspect = 'equal', frame_width=600).opts(tools=["hover"])
+    rgb_image
+
+.. image:: ../images/intake_examples/lat_lon_image.jpg
+
+Orthorectifying using a shapefile
+
+::
+    
+    shp = gpd.read_file("~/SHIFT-Python-Utilities/shift_python_utilities/tests/test_data/shp/test.shp")
+    ds = cat.L2a(date=20220224, time=200332, ortho=True, filter_bands=True, subset=shp).read_chunked()
+    ds
+
+.. image:: ../images/intake_examples/shapefile_subset.jpg
+
+::
+
+    ds_rgb = generate_rgb_plot(ds)
+    rgb_image = ds_rgb.hvplot.rgb(x='lon', y='lat', bands='wavelength', aspect = 'equal', frame_width=600).opts(tools=["hover"])
+    rgb_image
+
+.. image:: ../images/intake_examples/shapefile_image.jpg
+
+Using the IGM File
 ^^^^^^^^^^^^^^^^^^
 
 For this section we set the ortho argument to false and use the lat and lon data from the igm file to orthorectify outputs.
