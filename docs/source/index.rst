@@ -4,6 +4,9 @@ SHIFT SMCE User Guide
 
 This document serves comprehensive guide to working in the SHIFT SMCE environment.
 
+
+To jump into working with SHIFT data see the :doc:`quickstart <notebooks/quickstart>` guide!
+
 .. toctree::
    :maxdepth: 2
 
