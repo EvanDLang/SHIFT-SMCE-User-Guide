@@ -30,50 +30,7 @@ Harmonized Landsat Sentinel-2
 
 .. image:: ../images/earthdata_search_example.png
 
-The following code shows how to get direct s3 access.
 
-::
+See :doc:`aligning data with different resolutions <../notebooks/aligning_data_with_different_resolutions>` notebook to see an example of working with EMIT, HLS and SHIFT data.
 
-    import requests
-    import s3fs
-    import rasterio as rio
-    import rioxarray as rxr
-    
-    s3_cred_endpoint = {
-    'podaac':'https://archive.podaac.earthdata.nasa.gov/s3credentials',
-    'gesdisc': 'https://data.gesdisc.earthdata.nasa.gov/s3credentials',
-    'lpdaac':'https://data.lpdaac.earthdatacloud.nasa.gov/s3credentials',
-    'ornldaac': 'https://data.ornldaac.earthdata.nasa.gov/s3credentials',
-    'ghrcdaac': 'https://data.ghrc.earthdata.nasa.gov/s3credentials'
-    }
-    
-        
-    def get_temp_creds(provider):
-        return requests.get(s3_cred_endpoint[provider]).json()
-    
 
-Get Credentials
-
-::
-
-    temp_creds_req = get_temp_creds('lpdaac')
-
-Pass Authentication to s3fs
-
-::
-
-    fs_s3 = s3fs.S3FileSystem(anon=False, 
-                              key=temp_creds_req['accessKeyId'], 
-                              secret=temp_creds_req['secretAccessKey'], 
-                              token=temp_creds_req['sessionToken'])
-                          
-Access the data using rasterio or rioxarray
-
-::
-
-    s3_url = "s3://lp-prod-protected/HLSL30.020/HLS.L30.T56JKT.2023078T235959.v2.0/HLS.L30.T56JKT.2023078T235959.v2.0.B01.tif"
-    
-    ds = rxr.open_rasterio(s3_url)
-    
-    with rio.open(s3_url) as src:
-        print(src.profile)
