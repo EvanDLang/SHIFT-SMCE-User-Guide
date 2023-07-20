@@ -14,7 +14,9 @@ Open an interactive notebook:
     .. _link: https://daskhub.shift.mysmce.com/user/joyvan/pasarela/open?url=https://raw.githubusercontent.com/EvanDLang/SHIFT-SMCE-User-Guide/development/docs/source/notebooks/clustering_examples.ipynb
 
 ::
-    
+
+    import sys
+    sys.path.append('/efs/SHIFT-Python-Utilities/')
     from shift_python_utilities.intake_shift import shift_catalog
     import xarray as xr
     import pandas as pd

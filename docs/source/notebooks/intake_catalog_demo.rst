@@ -1,9 +1,7 @@
 Loading SHIFT Data with Intake
 ==============================
 
-The SHIFT Python Utilities library has a custom intake driver which provides a simple interface for reading in SHIFT data. The custom driver allows for common preprocessing operations to be incorporated into the data loading call. The SHIFT Python Utilities `Documentation <https://shift-python-utilities.readthedocs.io/en/latest/>`_ has installation instructions.
-
-Note: The library is rapidly changing and as new features are incorporated, the library will need to be reinstalled.
+The SHIFT Python Utilities library has a custom intake driver which provides a simple interface for reading in SHIFT data.  The custom driver allows for common preprocessing operations such as orthorectifying and subseting with a bounding box or shapefile.
 
 This notebook demonstrates some of the basic xarray functionality.
 
@@ -15,8 +13,6 @@ Open an interactive notebook:
 
 3. Select a kernel
 
-4. `Install the SHIFT Python Utilities library <https://shift-python-utilities.readthedocs.io/en/latest/>`_
-
 
 ::
     
@@ -25,8 +21,12 @@ Open an interactive notebook:
     import matplotlib.pyplot as plt
     import xarray as xr
     import pandas as pd
+    import os
+    os.environ['USE_PYGEOS'] = '0'
     import geopandas as gpd
     import hvplot.pandas 
+    import sys
+    sys.path.append('/efs/SHIFT-Python-Utilities/')
     from shift_python_utilities.intake_shift import shift_catalog
     import holoviews as hv
     hv.extension('bokeh')

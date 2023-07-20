@@ -15,6 +15,8 @@ This user guide has several example notebooks demonstrating how to work with AVI
    ../notebooks/aligning_data_with_different_resolutions
    ../notebooks/visualizing_data
    ../notebooks/clustering_examples
+   ../notebooks/R_example
+   ../notebooks/field_data_example
    
 
 Additional examples can be found here: https://github.com/marinadunn/SHIFT-STAC-demo; specifically, take a look at this `notebook`_.

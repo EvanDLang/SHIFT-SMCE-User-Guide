@@ -14,10 +14,10 @@ The EMIT team has put together a thorough set of tutorials on how to access and 
 - `Getting for EMIT data via EarthData search <https://github.com/nasa/EMIT-Data-Resources/blob/main/guides/Getting_EMIT_Data_using_EarthData_Search.md>`_
 
 
-- `Direct s3 access for EMIT Data <https://github.com/nasa/EMIT-Data::-Resources/blob/main/how-tos/How_to_Direct_S3_Access.ipynbL>`_
+- `Direct s3 access for EMIT Data <https://github.com/nasa/EMIT-Data-Resources/blob/main/python/how-tos/How_to_Direct_S3_Access.ipynb>`_
 
 
-- `Extracting an area from EMIT imagery <https://github.com/nasa/EMIT-Data-Resources/blob/main/how-tos/How_to_Extract_Area.ipynbL>`_
+- `Extracting an area from EMIT imagery <https://github.com/nasa/EMIT-Data-Resources/blob/main/python/how-tos/How_to_Extract_Area.ipynb>`_
 
 
 

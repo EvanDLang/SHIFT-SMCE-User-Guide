@@ -19,6 +19,8 @@ Open an interactive notebook:
 
 ::
     
+    import sys
+    sys.path.append('/efs/SHIFT-Python-Utilities/')
     from shift_python_utilities.intake_shift import shift_catalog
     import xarray as xr
     import rioxarray as rxr
