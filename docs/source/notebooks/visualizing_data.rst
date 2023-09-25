@@ -36,31 +36,73 @@ Open an interactive notebook:
     import hvplot.xarray
 
 
+Plotting an RGB image
+---------------------
+
+Plotting an RGB image can be a good method of validation. Here are some helper functions(normalize_band, brighten, gammacorr) along with a driver (plot_rgb) which can be used for RGB plots
+
 ::
 
-    # Supporting functions
+    def normalize_band(band):
+        mask = ~np.isnan(band)
 
-    def gamma_adjust(array):
-        # Rescale Values using gamma to adjust brightness
-        # Create exponent for gamma scaling - can be adjusted by changing 0.2 
-        gamma = math.log(0.2)/math.log(np.nanmean(array))
-        
-        # Apply scaling and clip to 0-1 range
-        scaled = np.power(array,gamma).clip(0,1) 
-        
-        #Assign NA's to 1 so they appear white in plots
-        scaled = np.nan_to_num(scaled, nan = 1)
-        return scaled
+        band_min, band_max = (band[mask].min(), band[mask].max())
+        band[mask] = ((band[mask] - band_min)/((band_max - band_min)))
+        return band
 
-    def find_nearest(array1, array2):
-        new_array = np.zeros(array2.shape)
-        
-        for ind, value in enumerate(array2):
-            idx = (np.abs(array1 - value)).argmin()
-            new_array[ind] = array1[idx]
-        
-        return new_array
+    def brighten(band, alpha=0.13, beta=0):
+        return np.clip(alpha*band+beta, 0,255)
 
+    def gammacorr(band, gamma=2):
+        return np.power(band, 1/gamma)
+
+    def plot_rgb(data, normalize=False, **kwargs):
+        """
+        accepts 3 bands
+        accepted kwargs: alpha, beta, gamma
+        """
+        assert isinstance(data, xr.DataArray)
+
+        dim_order = data.dims
+        assert len(dim_order) == 3, "data must have 3 dimensions (band, y, x)"
+
+        coords = {}
+        for dim in dim_order:
+            if dim in [data.rio.x_dim, data.rio.y_dim]:
+                coords[dim] = getattr(data, dim).values
+            else:
+                band_dim = dim
+                coords[dim] = [0, 1, 2]
+
+        ds_rgb = xr.DataArray(data, dims=dim_order, coords=coords).to_dataset(name='rgb')
+
+        brighten_args = [p for p in inspect.signature(brighten).parameters if p != 'band']
+        gamma_args = [p for p in inspect.signature(brighten).parameters if p != 'band']
+
+        b_kwargs = {}
+        gamma_kwargs = {}
+
+        for k, v in kwargs.items():
+            if k in brighten_args:
+                b_kwargs[k] = v 
+            elif gamma_args:
+                 gamma_kwargs[k] = v
+
+        if normalize:
+            ds_rgb = ds_rgb.assign(rgb=(dim_order, 
+                      xr.apply_ufunc(normalize_band, ds_rgb.rgb.values, dask='allowed', vectorize=True)))
+
+        if len(b_kwargs) > 0:
+            ds_rgb = ds_rgb.assign(rgb=(dim_order, 
+                      xr.apply_ufunc(brighten, ds_rgb.rgb.values, *tuple(b_kwargs.values()),  dask='allowed', vectorize=True)))
+
+
+        if len(gamma_kwargs) > 0:
+
+            ds_rgb = ds_rgb.assign(rgb=(dim_order, 
+                      xr.apply_ufunc(gammacorr, ds_rgb.rgb.values, *tuple(gamma_kwargs.values()), dask='allowed', vectorize=True)))
+
+        return ds_rgb, ds_rgb.hvplot.rgb(x=data.rio.x_dim, y=data.rio.y_dim, bands=band_dim, aspect='equal').opts(tools=["hover"])
 
 
 ::
@@ -68,15 +110,6 @@ Open an interactive notebook:
     # Read in the data using the shift python utilities library
     cat = shift_catalog()
     ds = cat.aviris_v1_gridded.read_chunked()
-
-    # Data can also be oppened using xarray
-    # ds = xr.open_dataset("reference://", engine="zarr", backend_kwargs={
-    #     "consolidated": False,
-    #     "storage_options": {"fo": "s3://dh-shift-curated/aviris/v1/gridded/zarr.json"}
-    # })
-
-    # Data can be oppened using rioxarray, however the xarray coordinates and data variables might use different names
-    # ds = rxr.open_rasterio("/efs/efs-data-curated/v1/20220308/L2a/ang20220308t184127_rfl")
 
     # Subset the data using the select method
     aoi = ds.sel(x=slice(730300,731000), y=slice(3819660,3819050), time="2022-03-08")
@@ -86,56 +119,10 @@ Open an interactive notebook:
 .. image:: ../images/data_visualization/xarray_data.jpg
 
 
-Plotting an RGB image
----------------------
-
 ::
 
-    # Retreive red, green and blue wavelengths and convert them to numpy arrays
-    red = aoi.sel(wavelength=650, method="nearest").reflectance
-    green = aoi.sel(wavelength=560, method="nearest").reflectance
-    blue = aoi.sel(wavelength=470, method="nearest").reflectance
-
-    # Scale the Bands
-    r = gamma_adjust(red)
-    g = gamma_adjust(green)
-    b = gamma_adjust(blue)
-
-    # Stack Bands and make an index
-    rgb = np.stack([r,g,b])
-    bds = np.array([0,1,2])
-
-    # Pull x and y values
-    y = aoi['y'].values
-    x = aoi['x'].values
-    
-    # Stack Bands and make an index
-    rgb = np.stack([r,g,b])
-    bds = np.array([0,1,2])
-    
-    # Pull x and y values
-    y = aoi['y'].values
-    x = aoi['x'].values
-    
-    # Create new rgb xarray data array.
-    data_vars = {'RGB':(['wavelength','y','x'], rgb)} 
-    coords = {'wavelength':(['wavelength'],bds), 'y':(['y'],y), 'x':(['x'],x)}
-    attrs = aoi.attrs
-    ds_rgb = xr.Dataset(data_vars=data_vars, coords=coords, attrs=attrs)
-    ds_rgb.coords['x'].attrs = aoi['x'].attrs
-    ds_rgb.coords['y'].attrs = aoi['y'].attrs
-    ds_rgb
-    
-.. image:: ../images/data_visualization/rgb_data.jpg
-
-
-::
-
-    # Create the RGB Image
-    rgb_image = ds_rgb.hvplot.rgb(x='x', y='y', bands='wavelength', 
-                                  aspect='equal', frame_width=400).opts(tools=["hover"])
-    rgb_image
-
+    ds_rgb, rgb_image = plot_rgb(aoi.reflectance.sel(wavelength=[650, 560, 470], method='nearest'), gamma=1.5)
+    rgb_image   
 
 .. image:: ../images/data_visualization/rgb_image.jpg
 
@@ -183,7 +170,7 @@ Selecting a Subset of an Image
 
 ::
 
-    # Create the RGB image plot
+    # Create an rgb image with additional opt tools using our previously created rgb data array
     rgb_image = ds_rgb.hvplot.rgb(
         x='x', y='y', bands='wavelength', aspect = 'equal', frame_width=400).opts(
         tools=["hover", 'box_select'])
@@ -226,7 +213,16 @@ Spectra Selection
 
 ::
 
-    # Create the RGB image plot
+    def find_nearest(array1, array2):
+        new_array = np.zeros(array2.shape)
+        
+        for ind, value in enumerate(array2):
+            idx = (np.abs(array1 - value)).argmin()
+            new_array[ind] = array1[idx]
+        
+        return new_array
+
+    # Create an rgb image with additional opt tools using our previously created rgb data array
     rgb_image = ds_rgb.hvplot.rgb(
         x='x', y='y', bands='wavelength', aspect = 'equal', frame_width=400).opts(
         tools=["hover", 'lasso_select'])

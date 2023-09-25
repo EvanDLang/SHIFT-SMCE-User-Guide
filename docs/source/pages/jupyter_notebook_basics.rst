@@ -34,7 +34,7 @@ Creating a New Conda Environment
 
     conda deactivate
 
-* Create a new environment (choose one)
+* Create a new environment (**Note Conda environments take up a couple of gbs of memory. Creating too many can fill up you home directory storage**)
 
 ::
 
@@ -43,6 +43,9 @@ Creating a New Conda Environment
 
     #Create a Conda environment from an existing environment
     conda create --name <your-env-name> --clone <name-of-existing-environment>
+    
+    # Create a Conda environment in a specific location
+    conda create -p /path/to/directory
 
     #Create a clean Conda environment
     conda create --name <your-env-name> python --no-default-package
@@ -60,11 +63,21 @@ Creating a New Conda Environment
 * Adding the new kernel
 
 **Note:** Make sure your new Conda environment is active
+
 ::
 
     python -m ipykernel install --user --name=<kernel-name>
 
 
+* Delete an environment
+
+::
+    
+    # Delete by name
+    conda remove -n <env-name> --all
+    
+    # Delete by path
+    conda remove -p /path/to/directory --all
 
 Kernel Management
 -----------------

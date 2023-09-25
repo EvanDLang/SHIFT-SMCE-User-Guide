@@ -12,6 +12,7 @@ This user guide has several example notebooks demonstrating how to work with AVI
    ../notebooks/quickstart
    ../notebooks/intake_catalog_demo
    ../notebooks/xarray_basics
+   ../notebooks/dask_cluster
    ../notebooks/aligning_data_with_different_resolutions
    ../notebooks/visualizing_data
    ../notebooks/clustering_examples
