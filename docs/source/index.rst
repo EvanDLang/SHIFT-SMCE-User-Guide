@@ -4,6 +4,7 @@ SHIFT SMCE User Guide
 
 This document serves comprehensive guide to working in the SHIFT SMCE environment.
 
+Check out the new :doc:`SHIFT data loader <notebooks/shift_data_loader>`!
 
 To jump into working with SHIFT data see the :doc:`quickstart <notebooks/quickstart>` guide!
 
