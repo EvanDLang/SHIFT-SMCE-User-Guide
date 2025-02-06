@@ -10,7 +10,8 @@ This user guide has several example notebooks demonstrating how to work with AVI
    :maxdepth: 2
     
    ../notebooks/quickstart
-   ../notebooks/shift_data_loader
+
+..   ../notebooks/shift_data_loader
    ../notebooks/intake_catalog_demo
    ../notebooks/xarray_basics
    ../notebooks/dask_cluster
